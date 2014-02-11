@@ -1,0 +1,7 @@
+.idea
+.vagrant
+node_modules
+.DS_Store
+build
+tmp
+testdata
