@@ -20,6 +20,28 @@ function createContext(stubs) {
             return value;
         })
     })
+
+    requirejs.define('paths', ['underscore'], function(_) {
+        return function path(name, options) {
+            var api = 'https://api.soundcloud.com';
+
+            var paths = {
+                playlists: '/me/playlists',
+                access_token: '/oauth2/token',
+                add_track: '/tracks'
+            };
+
+            var params = _.extend({
+                'format': 'json'
+            }, options || {});
+
+            var queryParams = _.map(_.pairs(params), function(pair) {
+                return pair.join('=');
+            });
+            return api + paths[name] + '?' + queryParams.join('&');
+        }
+    });
+
     return context;
 }
 

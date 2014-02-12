@@ -1,6 +1,5 @@
-define(['underscore', 'q', 'form-data', 'fs', 'request'], function(_, Q, FormData, fs, request) {
+define(['underscore', 'q', 'form-data', 'fs', 'request', 'PlayList', 'Track', 'paths'], function(_, Q, FormData, fs, request, PlayList, Track, path) {
 
-    var api = 'https://api.soundcloud.com';
 
     function SoundCloud(clientId, clientSecret, userName, password, redirectUri) {
 
@@ -13,7 +12,7 @@ define(['underscore', 'q', 'form-data', 'fs', 'request'], function(_, Q, FormDat
             form.append('redirect_uri', redirectUri);
             form.append('username', userName);
             form.append('password', password);
-            form.submit(api + '/oauth2/token', function(err, response) {
+            form.submit(path('access_token'), function(err, response) {
                 response.on('data', function(chunk) {
                     deffered.resolve(JSON.parse(chunk.toString('utf8'))['access_token']);
                 })
@@ -21,32 +20,31 @@ define(['underscore', 'q', 'form-data', 'fs', 'request'], function(_, Q, FormDat
             return deffered.promise;
         })();
 
+        this.playlists = function() {
+            var deffered = Q.defer();
+            token.then(function(accessToken) {
+                var uri = path('playlists', {
+                    'oauth_token': accessToken
+                });
+                request(uri, function(err, response) {
+                    var xs = JSON.parse(response['body']);
+                    var playlists = _.map(xs, function(x) {
+                        return new PlayList(accessToken, x)
+                    })
+                    deffered.resolve(playlists);
+                });
+            });
 
-        this.addTrack = function(title, description, genre, playlist, stream) {
+            return deffered.promise;
+        }
+
+        this.addTrack = function(title, description, genre, stream) {
             var soundCloud = this;
             var deffered = Q.defer();
             token.then(function(accessToken) {
-                var form = new FormData();
-                form.append('track[title]', title);
-                form.append('track[tags]', 'tags');
-                form.append('track[description]', description);
-                form.append('track[genre]', genre);
-                form.append('oauth_token', accessToken);
-                form.append('track[asset_data]', stream);
-                form.submit(api + '/playlists/' + playlist, function(err, response) {
-                    if (!err) {
-                        console.log('upload successful');
-                        response.on('data', function(chunk) {
-                            deffered.resolve(chunk.toString('utf8'));
-                        })
-                    } else {
-                        console.log(err);
-                        deffered.reject('Error while uploading track');
-                    }
-                });
+                Track.upload(accessToken, title, description, genre, stream);
             });
             return deffered.promise;
-
         }
 
     }
