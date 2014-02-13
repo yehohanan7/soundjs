@@ -42,7 +42,7 @@ define(['underscore', 'q', 'form-data', 'fs', 'request', 'PlayList', 'Track', 'p
             var soundCloud = this;
             var deffered = Q.defer();
             token.then(function(accessToken) {
-                Track.upload(accessToken, title, description, genre, stream);
+                deffered.resolve(Track.upload(accessToken, title, description, genre, stream));
             });
             return deffered.promise;
         }

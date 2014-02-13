@@ -1,30 +1,35 @@
 {
-  "name": "scjs",
-  "version": "0.0.1",
-  "private": true,
-  "scripts": {
-    "test": "mocha"
-  },
-  "dependencies": {
-    "request": "2.30.0",
-    "underscore": "1.5.2",
-    "q": "1.0.0",
-    "oauth": "~0.9.11",
-    "querystring": "~0.2.0",
-    "requestify": "~0.1.16",
-    "chai-as-promised": "~4.1.0",
-    "requirejs": "~2.1.10",
-    "squirejs": "~0.1.0",
-    "form-data-ext": "0.0.1"
-  },
-  "readmeFilename": "README.md",
-  "description": "Sound cloud Node js",
-  "devDependencies": {
-    "mocha": "~1.16.2",
-    "chai": "1.8.1",
-    "sinon-chai": "2.4.0"
-  },
-  "repository": "",
-  "author": "John",
-  "license": "BSD"
+    "name": "soundjs",
+    "version": "0.0.1",
+    "private": true,
+    "scripts": {
+        "test": "mocha"
+    },
+    "dependencies": {
+        "request": "2.30.0",
+        "underscore": "1.5.2",
+        "q": "1.0.0",
+        "oauth": "~0.9.11",
+        "requirejs": "~2.1.10",
+        "form-data": "~0.1.2"
+    },
+    "readmeFilename": "README.md",
+    "description": "Sound cloud Node js",
+    "devDependencies": {
+        "mocha": "~1.16.2",
+        "chai": "1.8.1",
+        "sinon-chai": "2.4.0",
+        "chai-as-promised": "~4.1.0",
+    },
+    "engines": {
+        "node": ">= 0.8"
+    },
+    "main": "./src/main",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/yehohanan7/soundjs"
+    },
+    "author": "John Pradeep",
+    "description": "A module to access sound cloud, you can upload tracks, manage playlist etc",
+    "license": "BSD"
 }

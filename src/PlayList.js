@@ -1,9 +1,47 @@
-define(['underscore', 'q', 'form-data', 'request', 'Track'], function(_, Q, FormData, request, Track) {
+define(['underscore', 'q', 'form-data', 'request', 'Track', 'url'], function(_, Q, FormData, request, Track, URL) {
     function PlayList(accessToken, json) {
-        _.extend(this, json);
+        var playlist = this;
 
-        this.addTrack = function(title, description, genre, trackStream) {
+        _.extend(playlist, json);
 
+        playlist.trackIds = function() {
+            return _.map(json.tracks, function(track) {
+                return track.id;
+            })
+        }
+
+        playlist.parsedUrl = function() {
+            var playListUri = URL.parse(playlist.uri);
+            return {
+                method: 'put',
+                host: playListUri.host,
+                path: playListUri.path,
+                protocol: playListUri.protocol
+            };
+        }
+
+
+        playlist.addTrack = function(track) {
+            var deffered = Q.defer();
+            var form = new FormData();
+            form.append('format', 'json');
+            _.each(playlist.trackIds(), function(id) {
+                form.append('playlist[tracks][][id]', id);
+            });
+            form.append('playlist[tracks][][id]', track.id);
+            form.append('oauth_token', accessToken);
+            form.submit(playlist.parsedUrl(), function(err, response) {
+                if (!err) {
+                    console.log('Track added to playlist!');
+                    response.on('data', function(chunk) {
+                        deffered.resolve(chunk.toString('utf8'));
+                    });
+                } else {
+                    console.log(err);
+                    deffered.reject('Error while adding track to the play list');
+                }
+            });
+            return deffered.promise;
         }
 
     }

@@ -38,6 +38,7 @@ function createContext(stubs) {
             var queryParams = _.map(_.pairs(params), function(pair) {
                 return pair.join('=');
             });
+            console.log(api + paths[name] + '?' + queryParams.join('&'));
             return api + paths[name] + '?' + queryParams.join('&');
         }
     });
