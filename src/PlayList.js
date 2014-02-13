@@ -22,6 +22,7 @@ define(['underscore', 'q', 'form-data', 'request', 'Track', 'url'], function(_, 
 
 
         playlist.addTrack = function(track) {
+            console.log('adding track to playlist...');
             var deffered = Q.defer();
             var form = new FormData();
             form.append('format', 'json');

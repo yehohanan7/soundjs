@@ -5,6 +5,7 @@ define(['underscore', 'q', 'form-data', 'request', 'paths'], function(_, Q, Form
     }
 
     Track.upload = function(accessToken, title, description, genre, stream) {
+        console.log('uploading track...');
         var deffered = Q.defer();
         var form = new FormData();
         form.append('format', 'json');
