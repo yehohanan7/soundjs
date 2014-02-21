@@ -27,11 +27,15 @@ define(['underscore', 'q', 'form-data', 'fs', 'request', 'PlayList', 'Track', 'p
                     'oauth_token': accessToken
                 });
                 request(uri, function(err, response) {
-                    var xs = JSON.parse(response['body']);
-                    var playlists = _.map(xs, function(x) {
-                        return new PlayList(accessToken, x)
-                    })
-                    deffered.resolve(playlists);
+                    if (err) {
+                        deffered.reject('error while getting playlists..');
+                    } else {
+                        var xs = JSON.parse(response['body']);
+                        var playlists = _.map(xs, function(x) {
+                            return new PlayList(clientId, accessToken, x)
+                        })
+                        deffered.resolve(playlists);
+                    }
                 });
             });
 

@@ -2,7 +2,7 @@
     "author": "John Pradeep",
     "name": "soundjs",
     "description": "A module to access sound cloud, you can upload tracks, manage playlist etc",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "repository": {
         "type": "git",
         "url": "https://github.com/yehohanan7/soundjs"

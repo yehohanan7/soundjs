@@ -1,5 +1,5 @@
 define(['underscore', 'q', 'form-data', 'request', 'Track', 'url'], function(_, Q, FormData, request, Track, URL) {
-    function PlayList(accessToken, json) {
+    function PlayList(clientId, accessToken, json) {
         var playlist = this;
 
         _.extend(playlist, json);
@@ -18,6 +18,21 @@ define(['underscore', 'q', 'form-data', 'request', 'Track', 'url'], function(_, 
                 path: playListUri.path,
                 protocol: playListUri.protocol
             };
+        }
+
+        playlist.tracks = function() {
+            console.log('fetching tracks for playlist : ' + playlist.title);
+            var deffered = Q.defer();
+            var uri = playlist.uri + '?client_id=' + clientId + '&format=json';
+            request(uri, function(err, response, body) {
+                if (!err) {
+                    var tracks = _.map(JSON.parse(body).tracks, function(track) {
+                        return new Track(accessToken, track);
+                    })
+                    deffered.resolve(tracks);
+                }
+            });
+            return deffered.promise;
         }
 
 
